@@ -1,0 +1,49 @@
+服务端想让浏览器做出何种只能通过http响应头来是浏览器做出反映
+查找http响应头
+浏览器通过请求头来让服务端知道何种请求
+get方式最大只能传1k，超过1k就要用post
+Servlet业务逻辑处理和动态调用
+Servlet是最基础的服务借口 也需要在web.xml中配置
+Servlet工作原理和生命周期{
+	1.当浏览器第一次访问Servlet时，服务器会根据浏览器的访问路径，在xml中进行反射
+	2.调用init()为Servlet做初始化工作
+	3.调用doXXX()为浏览器做响应
+	4.如果浏览器再次访问相同的Servlet,直接实现从服务端维护的Servlet实例集合中取得相对应的实现，为浏览器服务
+	5.同一个Servlet实例，在服务端只有哟个
+	6.服务器在决定销毁Servlet实例之前，调用destory()方法,每个Servlet实例只会调用一次
+}
+整个访问过程{
+	1.浏览器访问tomcat
+	2.tomcat形成HttpServletRequest HttpServletResponse对象
+	3.tomcat将对象发送到向对应的doXXX方法中
+	4.doXXX处理响应产生相应体
+	5.将相应体返回到tomcat，然后tomcat产生HTML返回到浏览器
+}
+MyEclipse项目目录结构--》Tomcat目录结构{
+	部署上去之后src没有;
+	WebRoot没有;
+	产生一个classes文件夹用于存放编译后的class文件
+}
+Servlet细节{
+	1.浏览器访问的url-pattern只是在web.xml中配置的任意字符串
+	2.<servlet-mapping>中的<url-pattern>可以有多个这样表示可以有几个路径映射到同一个Servlet中
+	3.<url-pattern>的路径中“*”，‘/’表示任意字符
+	4.‘*’，‘/’不能同时存在
+	5./*和*.do的映射关系，*.do最后
+	6.程序员编写的Servlet其实是由tomcat容器中德尔Servlet引擎来处理的，引擎会产生相对应的HttpServletRequest和
+    HttpServletResponse对应传入到Servlet的doXxxx()方法中
+	7.通过编写web.xml让servlet在部署的时候就创建[
+		<servlet>
+			<servlet-name></servlet-name>
+			<servlet-class></servlet-class>
+			<load-on-startup>1</load-on-startup>
+		</servlet>
+	]
+	8.load-on-startup后面的数字小的先加载(最小是0)，如果为负数和没有设置一样，需要在用户浏览器第一次访问的时候创建
+	9.当Tomcat处理静态页面时(没有对应的Servlet)时tomcat会提供一个缺省的Servlet
+	10.url-pattern为/的servlet时是一个缺省的servlet，用于处理当前web下，访问路径错误的时候
+}
+tomcat服务器/容器{ 
+	servlet引擎(java编写的含有main方法的servlet处理类)
+	jsp引擎(java编写的含有main方法的servlet处理类)
+}
